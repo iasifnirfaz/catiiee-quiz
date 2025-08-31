@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Which Bookish Cat Personality Are You? 😸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        :root {
+            --bg-color: #f7e1f7; /* Soft pastel pink/purple */
+            --container-bg: #fff;
+            --font-color: #5d3a77;
+            --primary-button: #a58cb8;
+            --button-hover: #b99fd1;
+            --quiz-option-bg: #e0b0ff; /* Lavender */
+            --quiz-option-hover: #c9a0ff;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--font-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--container-bg);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 650px;
+            width: 100%;
+            transition: all 0.5s ease;
+        }
+
+        h1, h2 {
+            font-weight: 700;
+            color: #7d4e9d;
+        }
+
+        /* Landing & Result Page */
+        .landing-page, .result-page {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .greeting-message {
+            font-size: 1.5em;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        /* Buttons with animations */
+        .btn {
+            background-color: var(--primary-button);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-top: 25px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Quiz Page */
+        .quiz-page {
+            display: none;
+            text-align: left;
+        }
+
+        .question {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .options label {
+            display: block;
+            background-color: var(--quiz-option-bg);
+            color: var(--font-color);
+            padding: 18px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+            font-size: 1.1em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .options label:hover {
+            transform: translateY(-3px) scale(1.02);
+            background-color: var(--quiz-option-hover);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* The playful messages after an answer */
+        #feedback-message {
+            text-align: center;
+            margin-top: 15px;
+            font-style: italic;
+            font-size: 1.1em;
+            color: #888;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+        }
+
+        .options input[type="radio"] {
+            display: none;
+        }
+
+        .options input[type="radio"]:checked + label {
+            background-color: var(--primary-button);
+            color: white;
+            transform: scale(1);
+            box-shadow: 0 0 0 4px #7d4e9d;
+        }
+        
+        /* Final Result Page */
+        .result-page {
+            display: none;
+        }
+
+        .result-title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .result-description {
+            font-size: 1.3em;
+            line-height: 1.5;
+            margin-top: 20px;
+        }
+
+        .small-joke {
+            font-style: italic;
+            color: #999;
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="landing-page" id="landing-page">
+            <p class="greeting-message">
+                Hey kid 😎! I made this little thing just for you 😅.<br>
+                Don’t worry, I’m not a coding pro 🖥️💜.<br>
+                And strictly, you cannot call me ‘uncle’ here 😏 — consider this your warning 😹!
+                <br><br>
+                <span style="font-size: 0.9em; font-style: italic; color: #a58cb8;">Special July edition 🎉🎂</span>
+            </p>
+            <button class="btn" onclick="startQuiz()">Let's Find Out!</button>
+        </div>
+
+        <div class="quiz-page" id="quiz-page">
+            <form id="quiz-form">
+                <div class="question-container" data-question-id="q1">
+                    <p class="question">1. Are you more of a sleepy cat 🐱💤 or a curious kitten 🐾?</p>
+                    <div class="options">
+                        <input type="radio" name="q1" value="Sleepy Cat" id="q1a">
+                        <label for="q1a">Sleepy Cat 😴</label>
+                        <input type="radio" name="q1" value="Curious Kitten" id="q1b">
+                        <label for="q1b">Curious Kitten 🐾</label>
+                    </div>
+                </div>
+
+                <div class="question-container" data-question-id="q2" style="display: none;">
+                    <p class="question">2. Pick your reading spot 📖:</p>
+                    <div class="options">
+                        <input type="radio" name="q2" value="Couch" id="q2a">
+                        <label for="q2a">Couch 🛋️</label>
+                        <input type="radio" name="q2" value="Bed" id="q2b">
+                        <label for="q2b">Bed 🛏️</label>
+                        <input type="radio" name="q2" value="Garden" id="q2c">
+                        <label for="q2c">Garden 🌿</label>
+                        <input type="radio" name="q2" value="Desk" id="q2d">
+                        <label for="q2d">Desk 💻</label>
+                    </div>
+                </div>
+
+                <div class="question-container" data-question-id="q3" style="display: none;">
+                    <p class="question">3. Favorite book genre ❤️:</p>
+                    <div class="options">
+                        <input type="radio" name="q3" value="Romance" id="q3a">
+                        <label for="q3a">Romance 💕</label>
+                        <input type="radio" name="q3" value="Thriller" id="q3b">
+                        <label for="q3b">Thriller 🕵️‍♀️</label>
+                        <input type="radio" name="q3" value="Fantasy" id="q3c">
+                        <label for="q3c">Fantasy 🏰</label>
+                        <input type="radio" name="q3" value="Non-fiction" id="q3d">
+                        <label for="q3d">Non-fiction 🧠</label>
+                    </div>
+                </div>
+
+                <div class="question-container" data-question-id="q4" style="display: none;">
+                    <p class="question">4. Chocolate 🍫 or tea ☕ while reading?</p>
+                    <div class="options">
+                        <input type="radio" name="q4" value="Chocolate" id="q4a">
+                        <label for="q4a">Chocolate 🍫</label>
+                        <input type="radio" name="q4" value="Tea" id="q4b">
+                        <label for="q4b">Tea ☕</label>
+                    </div>
+                </div>
+                
+                <div class="question-container" data-question-id="q5" style="display: none;">
+                    <p class="question">5. If your cat could talk 🐱, would it give advice on:</p>
+                    <div class="options">
+                        <input type="radio" name="q5" value="Love" id="q5a">
+                        <label for="q5a">Love 💌</label>
+                        <input type="radio" name="q5" value="Life" id="q5b">
+                        <label for="q5b">Life 🌈</label>
+                        <input type="radio" name="q5" value="Food" id="q5c">
+                        <label for="q5c">Food 🍔</label>
+                        <input type="radio" name="q5" value="Mischief" id="q5d">
+                        <label for="q5d">Mischief 😼</label>
+                    </div>
+                </div>
+                
+                <div class="question-container" data-question-id="q6" style="display: none;">
+                    <p class="question">6. Choose your cat personality:</p>
+                    <div class="options">
+                        <input type="radio" name="q6" value="Elegant Persian" id="q6a">
+                        <label for="q6a">Elegant Persian 😽</label>
+                        <input type="radio" name="q6" value="Playful Kitten" id="q6b">
+                        <label for="q6b">Playful Kitten 🤸</label>
+                        <input type="radio" name="q6" value="Bookworm Tabby" id="q6c">
+                        <label for="q6c">Bookworm Tabby 📚</label>
+                        <input type="radio" name="q6" value="Mischievous Maine Coon" id="q6d">
+                        <label for="q6d">Mischievous Maine Coon 😹</label>
+                    </div>
+                </div>
+                
+                <p id="feedback-message"></p>
+
+                <input type="hidden" name="_subject" value="Quiz Results: Bookish Cat Personality">
+                <input type="hidden" name="_format" value="plain">
+                <input type="hidden" name="_captcha" value="false">
+
+                <button type="submit" class="btn" id="submit-btn" style="display:none;">See Your Personality!</button>
+            </form>
+        </div>
+
+        <div class="result-page" id="result-page">
+            <h2 class="result-title" id="result-text"></h2>
+            <p class="result-description">
+                Keep this for when we meet 😎
+            </p>
+            <p class="small-joke">
+                And don’t forget, strictly no ‘uncle’ allowed 😏
+                <br>
+                When shall we meet? 😎
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for the quiz logic
+        const landingPage = document.getElementById('landing-page');
+        const quizPage = document.getElementById('quiz-page');
+        const resultPage = document.getElementById('result-page');
+        const quizForm = document.getElementById('quiz-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const questions = document.querySelectorAll('.question-container');
+        let currentQuestionIndex = 0;
+        
+        // Define the results logic
+        // You can add more combinations and results here.
+        const resultsMap = {
+            'Sleepy Cat_Couch_Romance_Chocolate_Love_Elegant Persian': 'The Romantic Bookish Persian 😽📖🍫',
+            'Curious Kitten_Bed_Thriller_Tea_Mischief_Mischievous Maine Coon': 'The Mysterious Maine Coon 🕵️‍♀️🐾☕',
+            'Curious Kitten_Garden_Fantasy_Chocolate_Life_Playful Kitten': 'The Playful Fantasy Furball 😸✨🍫',
+            'Sleepy Cat_Desk_Non-fiction_Tea_Food_Bookworm Tabby': 'The Thoughtful Bookworm Tabby 🧠📚☕',
+            'default': 'The Wonderful Reading Cat! 😸📖'
+        };
+
+        const playfulMessages = [
+            "Haha nice choice 😸",
+            "I see you, bookish cat 🐾",
+            "A perfect fit!",
+            "You got this, cat! 🐈",
+            "Great minds think alike...or do they? 🤔"
+        ];
+        
+        // Function to start the quiz
+        function startQuiz() {
+            landingPage.style.display = 'none';
+            quizPage.style.display = 'block';
+            showQuestion(currentQuestionIndex);
+        }
+
+        // Function to show the current question
+        function showQuestion(index) {
+            questions.forEach(q => q.style.display = 'none');
+            if (questions[index]) {
+                questions[index].style.display = 'block';
+                // Reset animation
+                questions[index].style.animation = 'none';
+                questions[index].offsetHeight; // Trigger reflow
+                questions[index].style.animation = null; 
+            }
+            if (index === questions.length - 1) {
+                submitBtn.style.display = 'block';
+            } else {
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        // Event listener for when an answer is selected
+        quizForm.addEventListener('change', (event) => {
+            const radio = event.target;
+            if (radio.type === 'radio') {
+                // Show a random playful message
+                const randomMessage = playfulMessages[Math.floor(Math.random() * playfulMessages.length)];
+                feedbackMessage.textContent = randomMessage;
+                feedbackMessage.style.opacity = '1';
+
+                setTimeout(() => {
+                    feedbackMessage.style.opacity = '0';
+                    setTimeout(() => {
+                        currentQuestionIndex++;
+                        if (currentQuestionIndex < questions.length) {
+                            showQuestion(currentQuestionIndex);
+                        }
+                    }, 500); // Small delay before moving to the next question
+                }, 1000); // Message is visible for 1 second
+            }
+        });
+
+        // Event listener for form submission
+        quizForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            // Collect all answers
+            const formData = new FormData(quizForm);
+            const answers = [];
+            for (let [key, value] of formData.entries()) {
+                if (key.startsWith('q')) {
+                    answers.push(value);
+                }
+            }
+            
+            // Determine and display the final result
+            const resultKey = answers.join('_');
+            const resultText = resultsMap[resultKey] || resultsMap['default'];
+            document.getElementById('result-text').textContent = resultText;
+            
+            // Show result page and hide quiz page
+            quizPage.style.display = 'none';
+            resultPage.style.display = 'block';
+            
+        });
+    </script>
+</body>
+</html>
